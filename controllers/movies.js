@@ -1,8 +1,11 @@
 const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');
+const BadRequestError = require('../errors/ForbiddenError');
 const Movie = require('../models/movie');
 
-// get all cards
+const { resMessages } = require('../configs/constants');
+
+// get all movies
 const getMovies = (req, res, next) => Movie.find({})
   .then((movies) => res.status(200).send(movies))
   .catch(next);
@@ -38,23 +41,28 @@ const createMovie = (req, res, next) => {
     nameEN,
     owner,
   })
-    .then((movie) => res.status(200).send(movie))
+    .then((movie) => {
+      if (!movie) {
+        throw new BadRequestError(resMessages.badRequest);
+      }
+      return res.status(200).send(movie);
+    })
     .catch(next);
 };
 
-// delete card selected by id
+// remove movie selected by id
 const deleteMovie = (req, res, next) => {
   const owner = req.user._id;
-  return Movie.findById(req.params.movieId)
+  return Movie.findById(req.params._id)
     .then((movie) => {
       if (!movie) {
-        throw new NotFoundError('Нет карточки с таким id');
+        throw new NotFoundError(resMessages.notFoundFilm);
       }
       if (JSON.stringify(owner) !== JSON.stringify(movie.owner)) {
-        throw new ForbiddenError('Нет прав для удаления карточки');
+        throw new ForbiddenError(resMessages.noRightsDeleteMovie);
       }
-      return Movie.remove(movie)
-        .then(() => res.status(200).send({ message: 'Карточка удалена' }))
+      return Movie.remove({ _id: movie._id })
+        .then(() => res.status(200).send({ message: resMessages.movieRemoved }))
         .catch(next);
     })
     .catch(next);

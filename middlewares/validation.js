@@ -1,4 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
+const { urlRegex } = require('../configs/constants');
 
 module.exports.getUserProfileValidation = celebrate({
   headers: Joi.object().keys({}).unknown(true),
@@ -27,9 +28,9 @@ module.exports.createMovieValidation = celebrate({
     description: Joi.string().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-    image: Joi.string().required().regex(/https?:\/\/(w*\.)?[\d\w\-.[+()~:/\\?#\]@!$&'*,;=]{2,}#?/),
-    trailer: Joi.string().required().regex(/https?:\/\/(w*\.)?[\d\w\-.[+()~:/\\?#\]@!$&'*,;=]{2,}#?/),
-    thumbnail: Joi.string().required().regex(/https?:\/\/(w*\.)?[\d\w\-.[+()~:/\\?#\]@!$&'*,;=]{2,}#?/),
+    image: Joi.string().required().regex(urlRegex),
+    trailer: Joi.string().required().regex(urlRegex),
+    thumbnail: Joi.string().required().regex(urlRegex),
   }),
 });
 

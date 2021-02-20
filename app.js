@@ -4,15 +4,13 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
 
-const { requestLogger, errorLogger } = require('./middlewares/logger');
-
-const { allErrorHandler } = require('./middlewares/errorHandler');
 const appRouter = require('./routes/index');
 const limiter = require('./middlewares/limiter');
+const { PORT, MONGO_URL } = require('./configs/config');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { resMessages, serverErrStatus } = require('./configs/constants');
 
 const app = express();
-
-const { PORT, MONGO_URL } = require('./configs/config');
 
 mongoose.connect(MONGO_URL, {
   useNewUrlParser: true,
@@ -34,6 +32,10 @@ app.use(errorLogger);
 
 app.use(errors());
 
-app.use(allErrorHandler);
+app.use((err, req, res, next) => {
+  const { statusCode = serverErrStatus, message = resMessages.serverError } = err;
+  res.status(statusCode).send({ message });
+  next();
+});
 
 app.listen(PORT);
