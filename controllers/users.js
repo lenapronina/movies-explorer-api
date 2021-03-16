@@ -10,8 +10,6 @@ const ConflictError = require('../errors/ConflictError');
 const createUser = (req, res, next) => {
   const {
     name,
-    about,
-    avatar,
     email,
     password,
   } = req.body;
@@ -24,8 +22,6 @@ const createUser = (req, res, next) => {
       return bcrypt.hash(password, SALT_ROUNDS)
         .then((hash) => User.create({
           name,
-          about,
-          avatar,
           email,
           password: hash,
         }))
