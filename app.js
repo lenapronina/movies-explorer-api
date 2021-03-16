@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
+const cors = require('cors');
 const { errors } = require('celebrate');
 
 const appRouter = require('./routes/index');
@@ -17,6 +18,14 @@ mongoose.connect(MONGO_URL, {
   useCreateIndex: true,
   useFindAndModify: false,
   useUnifiedTopology: true,
+});
+
+app.options('*', cors());
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+  next();
 });
 
 app.use(bodyParser.json());
