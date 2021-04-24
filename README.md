@@ -1,8 +1,8 @@
 # movies-explorer-api
 
-Бэкенд проекта movies-explorer
+Бэкенд проекта movies-explorer. Релизован с помощью Express JS
 
-- Публичный IP-адрес сервера: **178.154.254.122**
+- Публичный IP-адрес сервера: **178.154.210.137**
 - Домен api:  **api.dontbeatfilm.students.nomoredomains.work**
 
 ### Начать работу
@@ -16,20 +16,25 @@
   # по ssh
   git@github.com:lenapronina/movies-explorer-api.git 
   ```
+2. Перейдите в директорию
 
-2. Установите нужные модули из package.json
+  ```
+  cd movies-explorer-api
+  ```
+
+3. Установите нужные модули из package.json
 
   ```
   npm install
   ```
 
-3. Запустите сервер mongo
+4. Запустите сервер mongo
 
   ```
   mongod
   ```
 
-4. Запустите приложение
+5. Запустите приложение
   
   ```
   # запуск в production режиме
